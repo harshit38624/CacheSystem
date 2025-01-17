@@ -236,7 +236,41 @@ class DoublyLinkedList<K> {
 
 class Main {
     public static void main(String[] args) {
-        CacheSystem<Integer, Integer> cache_1 = new CacheSystem<>(new LRUCacheStrategy<>(3));
-        CacheSystem<Integer, Integer> cache_2 = new CacheSystem<>(new LFUCacheStrategy<>(3));
+        // Test LRU Cache Strategy
+        System.out.println("Testing LRU Cache Strategy:");
+        CacheSystem<Integer, String> lruCache = new CacheSystem<>(new LRUCacheStrategy<>(3));
+
+        lruCache.put(1, "One");
+        lruCache.put(2, "Two");
+        lruCache.put(3, "Three");
+
+        System.out.println(lruCache.get(1)); // Expected: "One"
+        lruCache.put(4, "Four");            // Evicts key 2 (least recently used)
+        System.out.println(lruCache.get(2)); // Expected: null
+        System.out.println(lruCache.get(3)); // Expected: "Three"
+        System.out.println(lruCache.get(4)); // Expected: "Four"
+
+        lruCache.put(5, "Five");            // Evicts key 1
+        System.out.println(lruCache.get(1)); // Expected: null
+        System.out.println(lruCache.get(5)); // Expected: "Five"
+
+        // Test LFU Cache Strategy
+        System.out.println("\nTesting LFU Cache Strategy:");
+        CacheSystem<Integer, String> lfuCache = new CacheSystem<>(new LFUCacheStrategy<>(3));
+
+        lfuCache.put(1, "One");
+        lfuCache.put(2, "Two");
+        lfuCache.put(3, "Three");
+
+        System.out.println(lfuCache.get(1)); // Expected: "One" (Frequency of key 1 increase)
+        lfuCache.put(4, "Four");            // Evicts key 2 (least frequently used)
+        System.out.println(lfuCache.get(2)); // Expected: null
+        System.out.println(lfuCache.get(3)); // Expected: "Three"
+        System.out.println(lfuCache.get(4)); // Expected: "Four"
+
+        lfuCache.put(5, "Five");            // Evicts key 1 (lowest frequency)
+        System.out.println(lfuCache.get(1)); // Expected: null
+        System.out.println(lfuCache.get(3)); // Expected: "Three"
+        System.out.println(lfuCache.get(5)); // Expected: "Five"
     }
 }
